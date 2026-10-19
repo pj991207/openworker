@@ -1,0 +1,7 @@
+Provider: scripted/offline; execution: real Windows local shell
+Task started: bg-1
+Completion watches after first tick: 0
+Process exited; final output drained: BUILD_OK
+Sessions resumed after completion: 0
+Assistant reply: (none)
+Extra resumes on next tick: 0

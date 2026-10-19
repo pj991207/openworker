@@ -1,0 +1,8 @@
+Provider: scripted/offline; execution: real Windows local shell
+Task started: bg-39941fa895a74a9192756ed044492500
+Completion watches after first tick: 1
+Process exited; final output drained: BUILD_OK
+Sessions resumed after completion: 1
+Resumed agent read BUILD_OK through shell_task_output
+Assistant reply: Background build finished: BUILD_OK.
+Extra resumes on next tick: 0
