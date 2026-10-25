@@ -1,0 +1,32 @@
+[
+  {
+    "longTasks": 1,
+    "totalMs": 737,
+    "entries": [
+      {
+        "start": 4779.899999976158,
+        "duration": 737
+      }
+    ]
+  },
+  {
+    "longTasks": 1,
+    "totalMs": 621,
+    "entries": [
+      {
+        "start": 7931.199999928474,
+        "duration": 621
+      }
+    ]
+  },
+  {
+    "longTasks": 1,
+    "totalMs": 686,
+    "entries": [
+      {
+        "start": 10862.099999904633,
+        "duration": 686
+      }
+    ]
+  }
+]

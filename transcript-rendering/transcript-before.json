@@ -1,0 +1,60 @@
+[
+  {
+    "longTasks": 2,
+    "totalMs": 1104,
+    "entries": [
+      {
+        "start": 6366,
+        "duration": 618
+      },
+      {
+        "start": 7034.199999928474,
+        "duration": 486
+      }
+    ]
+  },
+  {
+    "longTasks": 3,
+    "totalMs": 1448,
+    "entries": [
+      {
+        "start": 10767.799999952316,
+        "duration": 545
+      },
+      {
+        "start": 11361.799999952316,
+        "duration": 509
+      },
+      {
+        "start": 11876.199999928474,
+        "duration": 394
+      }
+    ]
+  },
+  {
+    "longTasks": 5,
+    "totalMs": 2204,
+    "entries": [
+      {
+        "start": 14515.399999976158,
+        "duration": 572
+      },
+      {
+        "start": 15114.699999928474,
+        "duration": 396
+      },
+      {
+        "start": 15524.199999928474,
+        "duration": 399
+      },
+      {
+        "start": 15935.5,
+        "duration": 425
+      },
+      {
+        "start": 16373.399999976158,
+        "duration": 412
+      }
+    ]
+  }
+]
