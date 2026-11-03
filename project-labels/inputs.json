@@ -1,0 +1,14 @@
+{
+  "before": {
+    "kind": "folder",
+    "label": "C:\\Users\\example\\project",
+    "full": "C:\\Users\\example\\project",
+    "key": "C:\\Users\\example\\project"
+  },
+  "after": {
+    "kind": "folder",
+    "label": "~/project",
+    "full": "C:\\Users\\example\\project",
+    "key": "C:\\Users\\example\\project"
+  }
+}
