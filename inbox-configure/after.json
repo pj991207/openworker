@@ -1,0 +1,24 @@
+{
+  "label": "after",
+  "viewport": {
+    "width": 1000,
+    "height": 900
+  },
+  "title": "Quarterly planning and launch readiness Quarterly planning and launch readiness Quarterly planning and launch readiness Quarterly planning and launch readiness Quarterly planning and launch readiness Quarterly planning and launch readiness",
+  "geometry": [
+    {
+      "left": 699,
+      "right": 955,
+      "width": 256,
+      "cardRight": 972,
+      "overflow": -17
+    },
+    {
+      "left": 345,
+      "right": 569,
+      "width": 224,
+      "cardRight": 972,
+      "overflow": -403
+    }
+  ]
+}
