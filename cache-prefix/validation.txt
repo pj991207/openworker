@@ -1,0 +1,42 @@
+OpenWorker context-prefix regression evidence — 2026-11-15
+
+Base: ecb445490fc054d52b8ea610d97ba947f57033d2
+Patched head: 3df1d4ae845b2f59d142a22e20597b1c9579b6a7
+Platform: Windows, Python 3.13.15. Commands run from repository root.
+The Python executable was the existing development virtual environment.
+No paid/model request, cache-token or cost measurement was performed.
+
+RED, before production changes:
+python -m pytest tests/test_context_block_placement.py tests/test_cache_breakpoint_placement.py -q --tb=short
+10 failed, 11 passed in 1.84s
+Failures: new questions, steering, changed-context followup, image/text parts and
+display sidecars, identical user text, replaced/restored history (2), compaction
+with/without a retained user (2), actual Anthropic converted request prefix.
+All ten failed at an assertion comparing the previous request with the next prefix.
+
+GREEN, final head (includes three additional edge/integration tests):
+python -m pytest tests/test_context_block_placement.py tests/test_cache_breakpoint_placement.py -q --tb=short
+24 passed in 3.74s
+
+Final-head related regression command:
+python -m pytest tests/test_context_block_placement.py tests/test_cache_breakpoint_placement.py tests/test_engine.py tests/test_plan_mode.py tests/test_skills_sessions.py tests/test_context_snapshot.py tests/test_observability_stamps_context.py tests/test_compaction.py tests/test_compaction_engine.py tests/test_compaction_transcript.py tests/test_compaction_persisted_summary.py tests/test_anthropic_provider.py tests/test_bedrock_provider.py tests/test_gemini_provider.py tests/test_openai_provider.py tests/test_codex_provider.py -q --tb=short
+294 passed in 47.52s
+
+Native full-backend attempt:
+python -m pytest tests -q --cov=coworker --cov-report=term-missing --maxfail=5 --tb=short
+5 failed, 347 passed, 1 skipped, 455 warnings in 227.46s
+Stopped at the five-failure limit; NOT a completed/passing full suite. This run
+began before the final same-context replacement test-only strengthening. The
+production code was already the final code. Warnings include SQLite resource leaks.
+
+The five failing cases were separately rerun on UNMODIFIED upstream ecb44549:
+python -m pytest tests/test_attachment_workspace.py::test_symlinked_attachment_directory_cannot_escape_session tests/test_automation.py::test_compute_next_run_once_local_is_dst_aware tests/test_base_dir.py::test_confined_paths_resolve_under_base_and_outsiders_are_refused tests/test_board_image_lifecycle.py::test_escape_and_symlink_to_ungranted_file_are_denied tests/test_board_image_lifecycle.py::test_concurrent_identical_uploads_dedupe_without_shared_temp_race -q --tb=short
+5 failed in 2.95s
+Three failures require Windows symlink privilege (WinError 1314); one uses the
+unavailable time.tzset; one races Windows attachment publication (PermissionError).
+
+Scope: one process-local context anchor, not persisted context snapshots. Empty or
+changed context removes obsolete notices. Same-context questions preserve engine
+and Anthropic-converted content prefixes. Restart and compaction/history replacement
+may reset the prefix. Earlier placement changes instruction recency; no claim of
+equivalent model behavior or a measured billing reduction is made.
