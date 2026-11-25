@@ -1,0 +1,62 @@
+Windows engine lock holder PID validation — 2026-11-25
+
+Upstream baseline: 74e59b3c620e4fb75ed4e78b90211abd641473e3
+PR head: bdbc395700bd8d40a2f3e18417da14a3e5364f41
+Platform: native Windows, CPython 3.13.15, PYTHONUTF8=1
+
+Baseline original tests:
+  python -m pytest tests/test_statelock.py -q
+  2 failed, 2 passed in 16.34s
+  test_second_acquire_in_process_is_refused_with_holder_pid:
+    PermissionError [Errno 13] when reading the locked first byte through another handle.
+  test_lock_is_held_across_processes_and_names_the_holder:
+    holder_pid is None rather than a holder PID.
+
+Strengthened tests with unchanged production code:
+  python -m pytest tests/test_statelock.py -q
+  2 failed, 9 passed in 14.46s
+  Both failures assert holder_pid(state) == actual holder's os.getpid().
+  The old/new lock-compatibility checks pass before the fix as well.
+
+Initial fix:
+  python -m pytest tests/test_statelock.py -q
+  11 passed in 14.44s
+
+Final head (including two malformed-tag cases and a POSIX format assertion):
+  python -m pytest tests/test_statelock.py tests/test_secrets_lock.py -q
+  20 passed in 78.45s
+  git diff --check
+  passed
+
+Native full-suite attempt at the final tree:
+  python -m pytest tests -q --cov=coworker --cov-report=term-missing --maxfail=5
+  5 failed, 347 passed, 1 skipped, 461 warnings in 204.23s
+  Stopped by the declared five-failure bound; this is NOT a complete Windows pass.
+
+The five failures:
+  tests/test_attachment_workspace.py::test_symlinked_attachment_directory_cannot_escape_session
+    WinError 1314 (symlink privilege)
+  tests/test_automation.py::test_compute_next_run_once_local_is_dst_aware
+    time.tzset does not exist on Windows
+  tests/test_base_dir.py::test_confined_paths_resolve_under_base_and_outsiders_are_refused
+    WinError 1314 (symlink privilege)
+  tests/test_board_image_lifecycle.py::test_escape_and_symlink_to_ungranted_file_are_denied
+    WinError 1314 (symlink privilege)
+  tests/test_board_image_lifecycle.py::test_concurrent_identical_uploads_dedupe_without_shared_temp_race
+    PermissionError opening the attachment after concurrent publication
+
+Re-ran those same five node IDs with -q against a clean git archive of baseline
+74e59b3c (and confirmed coworker imported from that archive):
+  5 failed in 5.18s, with the same five error classes and affected operations.
+
+Real child processes cover current-holder/current-contender PID reporting,
+legacy-holder/current-contender exclusion, current-holder/legacy-contender
+exclusion, old-format takeover after a newer record, release/reacquisition,
+and warning/strict entrypoint policy. Children report their own PID and exit
+on stdin EOF; the venv launcher's PID is not used as the expected owner.
+
+No model API calls, GUI screenshots, packaged desktop, macOS, or network-share
+validation. PID metadata remains informational and best effort; existing int()
+numeric parsing is not made stricter. It never authorizes killing or unlocking.
+Linux CI is recorded separately on the PR and skips the two Windows-only
+mixed-version tests; it cannot replace the native Windows evidence above.
